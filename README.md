@@ -13,7 +13,7 @@ In this lab, students will develop a portion of the application using Amazon S3 
 
 [Lab 2 solution](lab2.md)
 
-**Lab 3 (Python) - Develop Solutions Using Amazon DynamoDB 2 HOURS
+**Lab 3 (Python) - Develop Solutions Using Amazon DynamoDB 2 HOURS**
 In this lab, students will develop programs to create an Amazon DynamoDB table to store notes for the lab application and perform CRUD operation on the table.
 
 [Lab 3 solution](lab3.md)
