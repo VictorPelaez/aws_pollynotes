@@ -1,5 +1,6 @@
 ## Review credentials and identity
 `aws configure`
+
 `aws sts get-caller-identity`
 
 ## Run AWS CLI to list buckets
@@ -7,6 +8,7 @@
 
 ## Run AWS CLI to delete a bucket.
 `bucketToDelete=$(aws s3api list-buckets --output text --query 'Buckets[?contains(Name, `deletemebucket`) == `true`] | [0].Name')`
+
 `aws s3 rb s3://$bucketToDelete`
 
 ## same with debug option
@@ -14,6 +16,7 @@
 
 ## Review the iam policy
 `policyArn=$(aws iam list-policies --output text --query 'Policies[?PolicyName == `S3-Delete-Bucket-Policy`].Arn')`
+
 `aws iam get-policy-version --policy-arn $policyArn --version-id v1`
 
 ## Attach the iam policy to the rol "notes-application-role"
