@@ -6,10 +6,10 @@
 
 `python lab3_repo/loadData.py`
 
-`python labRepo/queryData.py`
+`python lab3_repo/queryData.py`
 
-`python labRepo/paginateData.py`
+`python lab3_repo/paginateData.py`
 
-`python labRepo/updateItem.py`
+`python lab3_repo/updateItem.py`
 
-`python labRepo/partiQL.py`
+`python lab3_repo/partiQL.py`
