@@ -10,3 +10,5 @@ In this lab the student verifies the specific IDE is installed and configured to
 
 **Lab 2 (Python) - Develop Solutions Using Amazon S3 2 HOURS**
 In this lab, students will develop a portion of the application using Amazon S3 to store files and configure a static website.
+
+[Lab 2 solution](lab2.md)
