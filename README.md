@@ -34,35 +34,35 @@ In this course, you will learn to:
 **Lab 1 - Configure the Development Environment**
 In this lab the student verifies the specific IDE is installed and configured to access AWS Services. They also use IAM to understand how permissions work.
 
-- [Lab 1 solution](lab1.md)
+- [Lab 1 solution](documentation/lab1.md)
 
 **Lab 2 - Develop Solutions Using Amazon S3**
 In this lab, students will develop a portion of the application using Amazon S3 to store files and configure a static website.
 
-- [Lab 2 solution](lab2.md)
+- [Lab 2 solution](documentation/lab2.md)
 
 **Lab 3 - Develop Solutions Using Amazon DynamoDB**
 In this lab, students will develop programs to create an Amazon DynamoDB table to store notes for the lab application and perform CRUD operation on the table.
 
-- [Lab 3 solution](lab3.md)
+- [Lab 3 solution](documentation/lab3.md)
 
 **Lab 4 - Develop Solutions Using AWS Lambda**
 In this lab, students will create the backend logic for the application by deploying their code with AWS Lambda functions.
 
-- [Lab 4 solution](lab4.md)
+- [Lab 4 solution](documentation/lab4.md)
 
 
 **Lab 5 - Develop Solutions Using Amazon API Gateway**
 In this lab, you will create an Amazon API Gateway resource for your application.
 
-- [Lab 5 solution](lab5.md)
+- [Lab 5 solution](documentation/lab5.md)
 
 **Lab 6 - Capstone - Complete the Application Build**
 In this lab, you will learn how to set up Amazon Cognito to authenticate and authorize users to use your API.
 
-- [Lab 6 solution](lab6.md)
+- [Lab 6 solution](documentation/lab6.md)
 
 **Lab 7 - Observe the Application Using AWS X-Ray**
 The application that you have built in previous labs has been re-deployed with AWS SAM. You will instrument the application code with AWS X-Ray to observe the operational state of the application.
 
-- [Lab 7 solution](lab7.md)
+- [Lab 7 solution](documentation/lab7.md)
