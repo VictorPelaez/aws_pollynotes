@@ -1,0 +1,46 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+      python: 3.8
+    commands:
+      - echo "Retrieving external variables.."
+      - cd $CODEBUILD_SRC_DIR
+      - echo "Replacing placeholders in SAM template..."
+      - sed -i "s~\[apiBucket\]~$API_BUCKET~g" template.yml
+      - cd $CODEBUILD_SRC_DIR_webRepo
+      - npm install
+  pre_build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR
+      - echo "Building the AWS SAM environment..."
+      - sam build
+      - echo "Deploying the AWS SAM environment...."
+      - sam deploy --stack-name polly-notes-api --s3-bucket $API_BUCKET --capabilities CAPABILITY_IAM
+  build:
+    commands:
+      - echo "Retrieving SAM Deployment Outputs..."
+      - AppClientId=$(aws cloudformation describe-stacks --stack-name polly-notes-api --query 'Stacks[0].Outputs[?OutputKey==`AppClientId`].OutputValue[]' --output text)
+      - UserPoolId=$(aws cloudformation describe-stacks --stack-name polly-notes-api --query 'Stacks[0].Outputs[?OutputKey==`UserPoolId`].OutputValue[]' --output text)
+      - ApiURL=$(aws cloudformation describe-stacks --stack-name polly-notes-api --query 'Stacks[0].Outputs[?OutputKey==`ApiURL`].OutputValue[]' --output text)
+      - echo "Creating Amazon Cognito user account..."
+      - aws cognito-idp sign-up --client-id $AppClientId --username student --password student
+      - echo "Confirming the new Cognito account..."
+      - aws cognito-idp admin-confirm-sign-up --user-pool-id $UserPoolId --username student
+      - echo "Create items in DynamoDB table..."
+      - "aws dynamodb put-item --table-name $TABLE_NAME --item '{\"UserId\": {\"S\": \"student\"}, \"NoteId\": {\"N\": \"1\"}, \"Note\": {\"S\": \"DynamoDB is NoSQL\"}}'"
+      - "aws dynamodb put-item --table-name $TABLE_NAME --item '{\"UserId\": {\"S\": \"student\"}, \"NoteId\": {\"N\": \"2\"}, \"Note\": {\"S\": \"A DynamoDB table is schemaless\"}}'"
+      - "aws dynamodb put-item --table-name $TABLE_NAME --item '{\"UserId\": {\"S\": \"student\"}, \"NoteId\": {\"N\": \"3\"}, \"Note\": {\"S\": \"PartiQL is a SQL compatible language for DynamoDB\"}}'"
+      - "aws dynamodb put-item --table-name $TABLE_NAME --item '{\"UserId\": {\"S\": \"student\"}, \"NoteId\": {\"N\": \"5\"}, \"Note\": {\"S\": \"Maximum size of an item is ____ KB?\"}}'"
+      - "aws dynamodb put-item --table-name $TABLE_NAME --item '{\"UserId\": {\"S\": \"student\"}, \"NoteId\": {\"N\": \"4\"}, \"Note\": {\"S\": \"I love DyDB\"}}'"
+      - echo "Configuring web application..." 
+      - cd $CODEBUILD_SRC_DIR_webRepo
+      - echo "Replacing placeholders in website configuration..."
+      - sed -i "s~\[AppClientId\]~$AppClientId~g" src/Config.js
+      - sed -i "s~\[UserPoolId\]~$UserPoolId~g" src/Config.js
+      - sed -i "s~\[ApiURL\]~$ApiURL~g" src/Config.js
+      - echo "Building the website..."
+      - npm run build
+      - echo "Deploying the website to Amazon S3..."
+      - aws s3 sync --delete build/. s3://$WEB_BUCKET

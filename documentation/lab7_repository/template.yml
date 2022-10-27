@@ -1,0 +1,216 @@
+Transform: AWS::Serverless-2016-10-31
+Description: SAM notes application api
+
+Parameters:
+  apiBucket:
+    Type: String
+    Default: '[apiBucket]'
+  tableName:
+    Type: String
+    Default: Notes
+
+#### TODO 3: Enable tracing for functions and api
+
+Globals:
+  Function:
+    Tracing: Active
+  Api:
+    TracingEnabled: true
+    MethodSettings:
+      - LoggingLevel: INFO
+        ResourcePath: '/*'
+        HttpMethod: '*'
+
+#### End TODO 3
+
+Resources:
+
+  # polly notes API
+
+  pollyNotesAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Name: PollyNotesAPI
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+      EndpointConfiguration:
+        Type: REGIONAL
+      Auth:
+        Authorizers:
+          PollyNotesAuthorizer:
+            UserPoolArn: !GetAtt PollyNotesPool.Arn 
+
+  # lambda functions and api events
+
+  listFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: list-function/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/DynamoDBReadRole
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref pollyNotesTable
+      Events:
+        listNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref pollyNotesAPI
+            Path: /notes
+            Method: get
+            Auth:
+              Authorizer: PollyNotesAuthorizer
+  
+  createUpdateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: createUpdate-function/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/DynamoDBWriteRole
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref pollyNotesTable
+      Events:
+        listNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref pollyNotesAPI
+            Path: /notes
+            Method: post
+            Auth:
+              Authorizer: PollyNotesAuthorizer
+  
+  searchFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: search-function/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/DynamoDBReadRole
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref pollyNotesTable
+      Events:
+        listNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref pollyNotesAPI
+            Path: /notes/search
+            Method: get
+            Auth:
+              Authorizer: PollyNotesAuthorizer
+  
+  deleteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: delete-function/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/DynamoDBWriteRole
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref pollyNotesTable
+      Events:
+        listNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref pollyNotesAPI
+            Path: /notes/{id}
+            Method: delete
+            Auth:
+              Authorizer: PollyNotesAuthorizer
+  
+  dictateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 5
+      CodeUri: dictate-function/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/DictateRole
+      Environment:
+        Variables:
+          MP3_BUCKET_NAME: !Ref apiBucket
+          TABLE_NAME: !Ref pollyNotesTable
+      Events:
+        listNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref pollyNotesAPI
+            Path: /notes/{id}
+            Method: post
+            Auth:
+              Authorizer: PollyNotesAuthorizer
+  
+  # Dynamodb table
+  
+  pollyNotesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref tableName
+      AttributeDefinitions:
+        - AttributeName: UserId
+          AttributeType: S
+        - AttributeName: NoteId
+          AttributeType: N
+      KeySchema:
+        - AttributeName: UserId
+          KeyType: HASH
+        - AttributeName: NoteId
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+  
+  # Cognito Configuration
+  
+  PollyNotesPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: false
+          RequireNumbers: false
+          RequireSymbols: false
+          RequireUppercase: false
+          
+  PollyNotesPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref PollyNotesPool
+      GenerateSecret: false
+      ClientName: PollyNotes
+
+  PollyNotesIdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        - ClientId:
+            !Ref PollyNotesPoolClient
+          ProviderName:
+            !GetAtt PollyNotesPool.ProviderName
+
+  PollyNotesIdentityPoolRoles:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId:
+        !Ref PollyNotesIdentityPool
+      Roles:
+        authenticated:
+          !Sub arn:aws:iam::${AWS::AccountId}:role/PollyCognitoAuthRole
+  
+Outputs:
+  ApiURL:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${pollyNotesAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+  AppClientId:
+    Value: !Ref PollyNotesPoolClient
+  UserPoolId:
+    Value: !Ref PollyNotesPool
+  CognitoPoolArn:
+    Value: !GetAtt PollyNotesPool.Arn
