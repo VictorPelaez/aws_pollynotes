@@ -7,17 +7,28 @@ Application notes in AWS with lambda, polly
 In this course, you will learn to:
 
 1. Build a simple end-to-end cloud application using AWS Software Development Kits (AWS SDKs),Command Line Interface (AWS CLI), and IDEs.
-     2. Configure AWS Identity and Access Management (IAM) permissions to support a development environment.
-     3. Use multiple programming patterns in your applications to access AWS services.
-     4. Use AWS SDKs to perform CRUD (create, read, update, delete) operations on Amazon Simple Storage Service (Amazon S3) and Amazon DynamoDB resources.
-     5. Build AWS Lambda functions with other service integrations for your web applications.
-     6. Understand the benefits of microservices architectures and serverless applications to design.
-     7. Develop API Gateway components and integrate with other AWS services.
-     8. Explain how Amazon Cognito controls user access to AWS resources.
-     9. Build a web application using Cognito to provide and control user access.
-     10. Use DevOps methodology to reduce the risks associated with traditional application releases and identify AWS services that help in implementing DevOps practices.
-     11. Use AWS Serverless Application Model (AWS SAM) to deploy an application.
-     12. Observe your application build using Amazon X-Ray.
+
+2. Configure AWS Identity and Access Management (IAM) permissions to support a development environment.
+
+3. Use multiple programming patterns in your applications to access AWS services.
+
+4. Use AWS SDKs to perform CRUD (create, read, update, delete) operations on Amazon Simple Storage Service (Amazon S3) and Amazon DynamoDB resources.
+
+5. Build AWS Lambda functions with other service integrations for your web applications.
+
+6. Understand the benefits of microservices architectures and serverless applications to design.
+
+7. Develop API Gateway components and integrate with other AWS services.
+
+8. Explain how Amazon Cognito controls user access to AWS resources.
+
+9. Build a web application using Cognito to provide and control user access.
+
+10. Use DevOps methodology to reduce the risks associated with traditional application releases and identify AWS services that help in implementing DevOps practices.
+
+11. Use AWS Serverless Application Model (AWS SAM) to deploy an application.
+
+12. Observe your application build using Amazon X-Ray.
 
 ## Labs
 
