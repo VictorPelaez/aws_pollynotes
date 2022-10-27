@@ -5,7 +5,8 @@ Application notes in AWS with lambda, polly
 ## Course objectives
 
 In this course, you will learn to:
-     1. Build a simple end-to-end cloud application using AWS Software Development Kits (AWS SDKs),Command Line Interface (AWS CLI), and IDEs.
+
+1. Build a simple end-to-end cloud application using AWS Software Development Kits (AWS SDKs),Command Line Interface (AWS CLI), and IDEs.
      2. Configure AWS Identity and Access Management (IAM) permissions to support a development environment.
      3. Use multiple programming patterns in your applications to access AWS services.
      4. Use AWS SDKs to perform CRUD (create, read, update, delete) operations on Amazon Simple Storage Service (Amazon S3) and Amazon DynamoDB resources.
