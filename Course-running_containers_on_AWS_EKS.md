@@ -8,6 +8,7 @@
 
 
 
+
 ## Lab 2: Deploying applications
 ## Lab 3: Monitoring EKS 
 ## Lab 4: Exploring EKS Communications
