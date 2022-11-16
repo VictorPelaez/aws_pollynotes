@@ -18,13 +18,14 @@ In this lab, you install the command line interface (CLI) tools that are require
 
 - [Lab 1 solution](documentation_rcoaws/lab1.md)
 
+## Lab 2: Continuous deployment with GitOps
+In this lab, you will create a delivery pipeline using AWS CodePipeline. You will also manage Kubernetes manifest files stored in a second repository. Finally, you will use a GitOps approach to allow system convergence when updating or installing new applications.
 
+- [Lab 2 solution](documentation_rcoaws/lab2.md)
 
+## Lab 3: Log collection and analysis 
+In this lab, you learn how to create a central logging solution for an application running on an Amazon Elastic Kubernetes Service (Amazon EKS) cluster. You deploy Fluent Bit as a sidecar application into the Amazon EKS cluster worker nodes. Fluent Bit gathers application data from all sources and routes this data to its destination in an Amazon S3 bucket. The data is streamed by the Fluent Bit sidecar into Kinesis Data Firehose which delivers the log data to an Amazon S3 bucket. You then create a table from a schema in Amazon Athena. After the table is created, you use standard SQL query code to query the log data in the Amazon S3 bucket.
 
-
-
-## Lab 2: Deploying applications
-## Lab 3: Monitoring EKS 
 ## Lab 4: Exploring EKS Communications
 
 ## Lab 5: Securing AWS EKS
