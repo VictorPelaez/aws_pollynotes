@@ -1,4 +1,4 @@
-#Lab 1 EKS
+# Lab 1: Building an Amazon EKS Environment
 
 ![image](lab1/p1.PNG)
 
