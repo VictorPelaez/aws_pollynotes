@@ -1,6 +1,6 @@
 # The Machine Learning Pipeline on AWS
 
-
+![image](documentation_mlpipeline/course_1.JPG)
 
 ## Labs
 
